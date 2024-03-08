@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-
+const {requireAuth} = require('./middleware/authMiddleware')
 const authRoutes = require('./routes/authRoutes');
 
 const app = express();
@@ -22,7 +22,8 @@ mongoose.connect(dbURI, { useUnifiedTopology: true})
 
 // routes
 app.get('/', (req, res) => res.render('home'));
-app.get('/smoothies', (req, res) => res.render('smoothies'));
+app.get('/smoothies', requireAuth, (req, res) => res.render('smoothies'));
+app.use(authRoutes)
 
 // // set cookie
 // app.get('/set-cookies', (req, res) =>{
@@ -40,5 +41,3 @@ app.get('/smoothies', (req, res) => res.render('smoothies'));
 //   console.log(cookies.newUser);
 //   res.json(cookies)
 // })
-
-app.use(authRoutes)
